@@ -8,6 +8,8 @@ class rester_config
     const file_name = 'config.ini';
 
     const common = 'common';
+    const common_database = 'database';
+    const common_database_default = 'default';
 
     const auth = 'auth';
     const auth_default = 'default';
@@ -86,6 +88,16 @@ class rester_config
 
         if(is_file($path)) return $path;
         return false;
+    }
+
+    /**
+     * 데이터베이스 설정정보 반환
+     *
+     * @return bool|array
+     */
+    public function database()
+    {
+        return $this->data[self::common][self::common_database];
     }
 
     /**
