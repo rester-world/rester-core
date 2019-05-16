@@ -27,7 +27,11 @@ class rester_config
      * default value
      * @var array
      */
-    protected $data = [];
+    protected $data = [
+        self::common => [
+            self::common_database => self::common_database_default
+        ]
+    ];
 
     /**
      * @var string

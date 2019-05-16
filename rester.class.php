@@ -79,27 +79,14 @@ abstract class rester
         $this->proc = $proc;
         $this->method = strtolower($method);
 
-        $base_path = dirname(__FILE__).'/../../'.self::path_module;
-
         // 프로시저 경로 설정
-        $this->path_proc = false;
-        $path = implode('/',array( $base_path, $module, $proc, $method.'.php' ));
-        if(is_file($path))
-        {
-            $this->path_proc = $path;
-        }
-
-        // 프로시저 파일 체크
-        if(!$this->path_proc)
-        {
-            throw new Exception("Not found procedure. Module: {$module}, Procedure: {$proc} ", rester_response::code_not_found);
-        }
+        $this->path_proc = $this->path_proc($module,$proc, $method);
 
         // create config
         $this->cfg = new rester_config($module);
 
         // create verify
-        $this->verify = new rester_verify($module, $proc, $method);
+        $this->verify = new rester_verify($this->path_verify(), $this->path_verify_user_func());
         $this->verify->validate($request_data);
 
         // check auth
@@ -127,6 +114,70 @@ abstract class rester
     public function __destruct()
     {
         if($this->redis) $this->redis->close();
+    }
+
+    /**
+     * @param string $module
+     * @param string $proc
+     * @param string $method
+     *
+     * @return bool|string
+     * @throws Exception
+     */
+    protected function path_proc($module, $proc, $method)
+    {
+        $base_path = dirname(__FILE__).'/../../'.self::path_module;
+
+        // 프로시저 경로 설정
+        $path_proc = false;
+        $path = implode('/',array( $base_path, $module, $proc, $method.'.php' ));
+        if(is_file($path))
+        {
+            $path_proc = $path;
+        }
+
+        // 프로시저 파일 체크
+        if(!$path_proc)
+        {
+            throw new Exception("Not found procedure. Module: {$module}, Procedure: {$proc} ", rester_response::code_not_found);
+        }
+        return $path_proc;
+    }
+
+    /**
+     * Path to verify file
+     *
+     * @return bool|string
+     */
+    protected function path_verify()
+    {
+        $path = implode('/',array(
+            dirname(__FILE__).'/../../'.rester::path_module,
+            $this->module,
+            $this->proc,
+            $this->method.'.ini'
+        ));
+
+        if(is_file($path)) return $path;
+        return false;
+    }
+
+    /**
+     * Path to verify file
+     *
+     * @return bool|string
+     */
+    protected function path_verify_user_func()
+    {
+        $path = implode('/',array(
+            dirname(__FILE__).'/../../'.rester::path_module,
+            $this->module,
+            $this->proc,
+            $this->method.'.verify.php'
+        ));
+
+        if(is_file($path)) return $path;
+        return false;
     }
 
     /**

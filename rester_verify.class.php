@@ -34,44 +34,22 @@ class rester_verify
     protected $result;
 
     /**
-     * @var string
-     */
-    protected $module;
-
-    /**
-     * @var string
-     */
-    protected $proc;
-
-    /**
-     * @var string
-     */
-    protected $method;
-
-    /**
      * rester_verify constructor.
      *
-     * @param string $module
-     * @param string $proc
-     * @param string $method
+     * @param string $path
+     * @param bool|string $path_user_func
      *
      * @throws Exception
      */
-    public function __construct($module,$proc,$method)
+    public function __construct($path, $path_user_func=false)
     {
-        $this->module = $module;
-        $this->proc = $proc;
-        $this->method = $method;
         $this->result = [];
 
         // 사용자 함수 있으면 추가
-        if($path_user_function = $this->path_user_func())
-        {
-            include $path_user_function;
-        }
+        if($path_user_func) include $path_user_func;
 
         // init
-        if($path = $this->path())
+        if(is_file($path))
         {
             $cfg = parse_ini_file($path,true, INI_SCANNER_RAW);
             foreach($cfg as $k=>$v)
@@ -106,42 +84,6 @@ class rester_verify
                         throw new Exception("Not supported type. ({$v['type']})", rester_response::code_param_filter);
             }
         }
-    }
-
-    /**
-     * Path to verify file
-     *
-     * @return bool|string
-     */
-    protected function path()
-    {
-        $path = implode('/',array(
-            dirname(__FILE__).'/../../'.rester::path_module,
-            $this->module,
-            $this->proc,
-            $this->method.'.ini'
-        ));
-
-        if(is_file($path)) return $path;
-        return false;
-    }
-
-    /**
-     * Path to verify file
-     *
-     * @return bool|string
-     */
-    protected function path_user_func()
-    {
-        $path = implode('/',array(
-            dirname(__FILE__).'/../../'.rester::path_module,
-            $this->module,
-            $this->proc,
-            $this->method.'.verify.php'
-        ));
-
-        if(is_file($path)) return $path;
-        return false;
     }
 
     /**
