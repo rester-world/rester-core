@@ -40,6 +40,14 @@ class cfg
     const access_control = 'access_control';
     const access_control_allows_origin = 'allows_origin';
 
+    const database = 'database';
+    const database_default = 'default';
+    const database_type = 'type';
+    const database_port = 'port';
+    const database_user = 'user';
+    const database_password = 'password';
+    const database_database = 'database';
+
     // default configuration
     private static $data = [
         self::common=>[
@@ -145,6 +153,18 @@ class cfg
      * @return string
      */
     public static function request_port($select) { return self::$data[self::request][$select][self::request_port]; }
+
+    /**
+     * @param string $select
+     *
+     * @return bool
+     */
+    public static function database($select=self::database_default)
+    {
+        $result = false;
+        if($v = self::$data[self::database][$select]) $result = $v;
+        return $result;
+    }
 
 
     /**
