@@ -173,7 +173,7 @@ class cfg
         // ---------------------------------------------------------------------
         /// Load config
         // ---------------------------------------------------------------------
-        $path = dirname(__FILE__).'/../cfg/'.self::filename;
+        $path = dirname(__FILE__).'/../../cfg/'.self::filename;
         if(!is_file($path))
             throw new Exception("There is no config file.(".self::filename.")", rester_response::code_config);
 
