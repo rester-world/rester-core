@@ -186,14 +186,16 @@ class cfg
     /**
      * Initialize default config
      *
+     * @param bool $path
+     *
      * @throws Exception
      */
-    public static function init()
+    public static function init($path=false)
     {
         // ---------------------------------------------------------------------
         /// Load config
         // ---------------------------------------------------------------------
-        $path = dirname(__FILE__).'/../../cfg/'.self::filename;
+        if(!$path) $path = dirname(__FILE__).'/../cfg/'.self::filename;
         if(!is_file($path))
             throw new Exception("There is no config file.(".self::filename.")", rester_response::code_config);
 

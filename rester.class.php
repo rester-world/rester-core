@@ -5,8 +5,6 @@
  */
 abstract class rester
 {
-    const path_module = 'src';
-
     /**
      * @var rester_config
      */
@@ -117,6 +115,14 @@ abstract class rester
     }
 
     /**
+     * @return string
+     */
+    protected function path_module()
+    {
+        return dirname(__FILE__).'/../src';
+    }
+
+    /**
      * @param string $module
      * @param string $proc
      * @param string $method
@@ -126,11 +132,9 @@ abstract class rester
      */
     protected function path_proc($module, $proc, $method)
     {
-        $base_path = dirname(__FILE__).'/../../'.self::path_module;
-
         // 프로시저 경로 설정
         $path_proc = false;
-        $path = implode('/',array( $base_path, $module, $proc, $method.'.php' ));
+        $path = implode('/',array( $this->path_module(), $module, $proc, $method.'.php' ));
         if(is_file($path))
         {
             $path_proc = $path;
@@ -152,7 +156,7 @@ abstract class rester
     protected function path_verify()
     {
         $path = implode('/',array(
-            dirname(__FILE__).'/../../'.rester::path_module,
+            $this->path_module(),
             $this->module,
             $this->proc,
             $this->method.'.ini'
@@ -170,7 +174,7 @@ abstract class rester
     protected function path_verify_user_func()
     {
         $path = implode('/',array(
-            dirname(__FILE__).'/../../'.rester::path_module,
+            $this->path_module(),
             $this->module,
             $this->proc,
             $this->method.'.verify.php'

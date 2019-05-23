@@ -42,13 +42,15 @@ class rester_config
      * rester_config constructor.
      *
      * @param string $module
+     * @param bool   $base_path
      *
      * @throws Exception
      */
-    public function __construct($module)
+    public function __construct($module, $base_path=false)
     {
         $this->module = $module;
-        $path = $this->path_cfg($module);
+        if(!$base_path) $base_path = dirname(__FILE__).'/../src';
+        $path = $this->path_cfg($module, $base_path);
 
         // init
         if($path)
@@ -79,13 +81,14 @@ class rester_config
      * Path to config file
      *
      * @param string $module
+     * @param string $base_path
      *
      * @return bool|string
      */
-    protected function path_cfg($module)
+    protected function path_cfg($module, $base_path)
     {
         $path = implode('/',array(
-            dirname(__FILE__).'/../../'.rester::path_module,
+            $base_path,
             $module,
             self::file_name
         ));
