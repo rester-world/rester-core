@@ -1,5 +1,12 @@
 <?php if(!defined('__RESTER__')) exit;
 
+require_once dirname(__FILE__) . '/cfg.class.php';
+require_once dirname(__FILE__) . '/session.class.php';
+require_once dirname(__FILE__) . '/rester_response.class.php';
+require_once dirname(__FILE__) . '/rester_verify.class.php';
+require_once dirname(__FILE__) . '/rester_config.class.php';
+require_once dirname(__FILE__) . '/rester.class.php';
+
 /**
  * Check associative array
  * 연관 배열인지 검사
