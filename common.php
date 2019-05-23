@@ -40,61 +40,6 @@ function request_param($key=null)
 }
 
 /**
- * @param string $module
- * @param string $proc
- * @param string $method
- * @param array  $query
- *
- * @return mixed
- */
-function request_module($module, $proc, $method, $query=[])
-{
-    global $current_rester;
-    $old_rester = $current_rester;
-    $res = false;
-
-    try
-    {
-        $current_rester = new resterPHP($module, $proc, $method, $query);
-        $res = $current_rester->run($old_rester);
-    }
-    catch (Exception $e)
-    {
-        rester_response::error($e->getMessage());
-    }
-
-    $current_rester = $old_rester;
-    return $res;
-}
-
-/**
- * @param string $proc
- * @param string $method
- * @param array  $query
- *
- * @return mixed
- */
-function request_procedure($proc, $method, $query=[])
-{
-    global $current_rester;
-    $old_rester = $current_rester;
-    $res = false;
-
-    try
-    {
-        $current_rester = new resterPHP($current_rester->module(), $proc, $method, $query);
-        $res = $current_rester->run($old_rester);
-    }
-    catch (Exception $e)
-    {
-        rester_response::error($e->getMessage());
-    }
-
-    $current_rester = $old_rester;
-    return $res;
-}
-
-/**
  * 외부 서비스 호출
  *
  * @param string $method
