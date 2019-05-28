@@ -23,11 +23,6 @@ function is_assoc($arr)
 }
 
 /**
- * 사용중인 rester instance
- */
-$current_rester = null;
-
-/**
  * return analyzed parameter
  *
  * @param null|string $key
