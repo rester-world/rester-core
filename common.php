@@ -76,6 +76,8 @@ function exten($method, $name, $module, $proc, $param=[])
             $proc
         ]);
 
+        if($token = request_param('token')) $param['token'] = $token;
+
         if($method=='GET')
         {
             $query = [];
