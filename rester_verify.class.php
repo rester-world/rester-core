@@ -190,7 +190,7 @@ class rester_verify
 
             // 필수입력 체크
             $require = $v[self::REQUIRE]=='true'?true:false;
-            if($require && !$result)
+            if($require && $result===false)
             {
                 throw new Exception($k." : The required input data does not have a value or pass validation.", rester_response::code_param_data);
             }
