@@ -64,8 +64,9 @@ function exten($method, $name, $module, $proc, $param=[])
         )
             throw new Exception("There is no config.(cfg[request][{$name}])",rester_response::code_config);
 
+        $port = $cfg[cfg::request_port];
         $url = implode('/', [
-            $cfg[cfg::request_host].':'.$cfg[cfg::request_port],
+            $cfg[cfg::request_host],
             $cfg[cfg::request_prefix],
             $module,
             $proc
@@ -86,6 +87,7 @@ function exten($method, $name, $module, $proc, $param=[])
         $ch = curl_init();
         curl_setopt_array($ch, array(
             CURLOPT_URL => $url,
+            CURLOPT_PORT => $port,
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_ENCODING => "",
             CURLOPT_MAXREDIRS => 10,
