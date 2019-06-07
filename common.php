@@ -35,6 +35,76 @@ function request_param($key=null)
 }
 
 /**
+ * https://stackoverflow.com/questions/3772096/posting-multidimensional-array-with-php-and-curl
+ * @param       $arrays
+ * @param array $new
+ * @param null  $prefix
+ */
+function http_build_query_for_curl( $arrays, &$new = array(), $prefix = null ) {
+
+    if ( is_object( $arrays ) ) {
+        $arrays = get_object_vars( $arrays );
+    }
+
+    foreach ( $arrays AS $key => $value ) {
+        $k = isset( $prefix ) ? $prefix . '[' . $key . ']' : $key;
+        if ( is_array( $value ) OR is_object( $value )  ) {
+            http_build_query_for_curl( $value, $new, $k );
+        } else {
+            $new[$k] = $value;
+        }
+    }
+}
+
+/**
+ * @param array  $cfg
+ * @param string $uri
+ * @param array  $body
+ * @param bool   $files
+ *
+ * @return bool|mixed
+ */
+function request_uri($method, $uri, $body=[], $files=false)
+{
+    // 2차배열 이상 처리
+    $post_body = null;
+    http_build_query_for_curl($body, $post_body);
+
+    if($files)
+    {
+        $post_body = array_merge($post_body,$files); // 1차원 배열만 전달됨
+    }
+
+    $ch = curl_init();
+
+    curl_setopt_array($ch, array(
+        CURLOPT_URL => $uri,
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_ENCODING => "",
+        CURLOPT_MAXREDIRS => 10,
+        CURLOPT_TIMEOUT => 30,
+        CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+        CURLOPT_CUSTOMREQUEST => $method,
+    ));
+    if($method=='POST') curl_setopt($ch,CURLOPT_POSTFIELDS, $post_body);
+
+    $response_body = curl_exec($ch);
+    $response_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    //echo curl_error($ch);
+    //var_dump(curl_getinfo($ch));
+    curl_close($ch);
+//    var_dump($response_body);
+//    exit;
+
+    if($response_code != 200)
+    {
+        //$this->error_msg = array_pop(json_decode($this->response_body,true));
+        return false;
+    }
+    return $response_body;
+}
+
+/**
  * 외부 서비스 호출
  *
  * @param string $method
@@ -74,6 +144,7 @@ function exten($method, $name, $module, $proc, $param=[])
 
         if($token = request_param('token')) $param['token'] = $token;
 
+        $post_body = [];
         if($method=='GET')
         {
             $query = [];
@@ -82,23 +153,27 @@ function exten($method, $name, $module, $proc, $param=[])
                 $query[] = $key.'='.$value;
             }
             $url .= '?'.urlencode(implode('&',$query));
+        } else {
+            $post_body = $param;
         }
 
-        $ch = curl_init();
-        curl_setopt_array($ch, array(
-            CURLOPT_URL => $url,
-            CURLOPT_PORT => $port,
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_ENCODING => "",
-            CURLOPT_MAXREDIRS => 10,
-            CURLOPT_TIMEOUT => 30,
-            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-            CURLOPT_CUSTOMREQUEST => $method
-        ));
-        if($method=='POST') curl_setopt($ch,CURLOPT_POSTFIELDS, $param);
+        $response_body = request_uri($method, $uri, $post_body);
 
-        $response_body = curl_exec($ch);
-        curl_close($ch);
+//        $ch = curl_init();
+//        curl_setopt_array($ch, array(
+//            CURLOPT_URL => $url,
+//            CURLOPT_PORT => $port,
+//            CURLOPT_RETURNTRANSFER => true,
+//            CURLOPT_ENCODING => "",
+//            CURLOPT_MAXREDIRS => 10,
+//            CURLOPT_TIMEOUT => 30,
+//            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+//            CURLOPT_CUSTOMREQUEST => $method
+//        ));
+//        if($method=='POST') curl_setopt($ch,CURLOPT_POSTFIELDS, $param);
+//
+//        $response_body = curl_exec($ch);
+//        curl_close($ch);
         $result = json_decode($response_body,true);
     }
     catch (Exception $e)
@@ -108,6 +183,7 @@ function exten($method, $name, $module, $proc, $param=[])
     }
     return $result;
 }
+
 
 /**
  * 외부 서비스 호출
