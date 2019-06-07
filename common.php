@@ -57,14 +57,15 @@ function http_build_query_for_curl( $arrays, &$new = array(), $prefix = null ) {
 }
 
 /**
- * @param array  $cfg
+ * @param string $method
  * @param string $uri
+ * @param int $port
  * @param array  $body
  * @param bool   $files
  *
  * @return bool|mixed
  */
-function request_uri($method, $uri, $body=[], $files=false)
+function request_uri($method, $uri, $port, $body=[], $files=false)
 {
     // 2차배열 이상 처리
     $post_body = null;
@@ -79,6 +80,7 @@ function request_uri($method, $uri, $body=[], $files=false)
 
     curl_setopt_array($ch, array(
         CURLOPT_URL => $uri,
+        CURLOPT_PORT => $port,
         CURLOPT_RETURNTRANSFER => true,
         CURLOPT_ENCODING => "",
         CURLOPT_MAXREDIRS => 10,
@@ -157,7 +159,7 @@ function exten($method, $name, $module, $proc, $param=[])
             $post_body = $param;
         }
 
-        $response_body = request_uri($method, $uri, $post_body);
+        $response_body = request_uri($method, $url, $port, $post_body);
 
 //        $ch = curl_init();
 //        curl_setopt_array($ch, array(
