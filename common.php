@@ -117,7 +117,7 @@ function request_uri($method, $uri, $port, $body=[], $files=false)
  *
  * @return bool|array
  */
-function exten($method, $name, $module, $proc, $param=[])
+function exten($method, $name, $module, $proc, $param=[], $files=false)
 {
     $result = false;
     $cfg = cfg::request($name);
@@ -159,7 +159,7 @@ function exten($method, $name, $module, $proc, $param=[])
             $post_body = $param;
         }
 
-        $response_body = request_uri($method, $url, $port, $post_body);
+        $response_body = request_uri($method, $url, $port, $post_body, $files);
 
 //        $ch = curl_init();
 //        curl_setopt_array($ch, array(
@@ -197,9 +197,9 @@ function exten($method, $name, $module, $proc, $param=[])
  *
  * @return bool|array
  */
-function exten_get($name, $module, $proc, $param=[])
+function exten_get($name, $module, $proc, $param=[], $files=false)
 {
-    return exten('GET',$name,$module,$proc,$param);
+    return exten('GET',$name,$module,$proc,$param,$files);
 }
 
 /**
@@ -212,9 +212,9 @@ function exten_get($name, $module, $proc, $param=[])
  *
  * @return bool|array
  */
-function exten_post($name, $module, $proc, $param=[])
+function exten_post($name, $module, $proc, $param=[],$files=false)
 {
-    return exten('POST',$name,$module,$proc,$param);
+    return exten('POST',$name,$module,$proc,$param,$files);
 }
 
 /**
