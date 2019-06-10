@@ -57,6 +57,7 @@ class rester_response
     protected static $error = false;
     protected static $error_trace = false;
     protected static $data = false;
+    protected static $custom = false;
 
     /**
      * @param string $code
@@ -90,6 +91,8 @@ class rester_response
             if(self::$error) $body['error'] = self::$error;
             if(self::$error_trace) $body['errorTrace'] = self::$error_trace;
         }
+        
+        if(self::$custom && is_array(self::$custom)) $body = array_merge($body, self::$custom);
         echo json_encode($body);
     }
 
@@ -131,6 +134,13 @@ class rester_response
      * @param string $msg
      */
     public static function warning($msg) { if(!self::$warning) self::$warning=[]; self::$warning[] = $msg; }
+
+    /**
+     * Add Custom data
+     *
+     * @param string $msg
+     */
+    public static function custom($key, $value) { if(!self::$custom) self::$custom=[]; self::$custom[$key] = $value; }
 
     /**
      * Add error
