@@ -194,6 +194,9 @@ class rester_verify
             {
                 throw new Exception($k." : The required input data does not have a value or pass validation.", rester_response::code_param_data);
             }
+            if($v[self::OPTIONS] == 'like-search') $result = '%'.$result.'%';
+            else if($v[self::OPTIONS] == 'like-search-left') $result = '%'.$result;
+            else if($v[self::OPTIONS] == 'like-search-right') $result = $result.'%';
             $this->result[$k] = $result;
         }
         return $this->result;
