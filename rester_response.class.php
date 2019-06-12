@@ -83,7 +83,7 @@ class rester_response
         $body['retCode'] = self::$res_code;
         if(self::$session) $body['session'] = self::$session;
         if(self::$msg) $body['msg'] = self::$msg;
-        if(self::$data) $body['data'] = self::$data;
+        $body['data'] = self::$data;
 
         if(cfg::debug_mode())
         {
