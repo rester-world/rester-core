@@ -246,7 +246,12 @@ function response_data($res, $fetch=true)
  */
 function cdn_image($uri)
 {
-    return cfg::get('file','cdn').'/rester-cdn/image/'.$uri;
+    $ext = cdn_get_ext($uri);
+    if($ext=='jpg' || $ext=='png' || $ext=='jpeg' ||$ext=='svg')
+    {
+        return cfg::get('file','cdn').'/rester-cdn/image/'.$uri;
+    }
+    return false;
 }
 
 /**
@@ -282,6 +287,28 @@ function cdn_delete($uri)
 function cdn_download($uri)
 {
     return cfg::get('file','cdn').'/rester-cdn/download/'.$uri;
+}
+
+/**
+ * @param string $uri
+ *
+ * @return bool|string
+ */
+function cdn_get_ext($uri)
+{
+    return substr($uri,strpos($uri, '.')+1);
+}
+
+/**
+ * @param string $uri
+ *
+ * @return string
+ */
+function cdn_get_filename($uri)
+{
+    $ext = cdn_get_ext($uri);
+    $sub_url = substr(substr($uri, strpos($uri,'/')+1),0, -(strlen($ext)+1));
+    return urldecode(explode('_',base64_decode(urldecode($sub_url)))[1]).'.'.$ext;
 }
 
 // -----------------------------------------------------------------------------
