@@ -18,6 +18,7 @@ class rester_verify
     const REQUIRE = 'require';
 
     const TOKEN = 'token';
+    const SECRET = 'secret';
 
     /**
      * @var array
@@ -25,7 +26,10 @@ class rester_verify
     protected $filter = [
         self::TOKEN=>[
             self::TYPE=>self::TYPE_TOKEN
-        ]
+        ],
+        self::SECRET=>[
+            self::TYPE=>self::TYPE_TOKEN
+        ],
     ];
 
     /**

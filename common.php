@@ -145,6 +145,7 @@ function exten($method, $name, $module, $proc, $param=[], $files=false)
         ]);
 
         if($token = request_param('token')) $param['token'] = $token;
+        if($secret = request_param('secret')) $param['secret'] = $secret;
 
         $post_body = [];
         if($method=='GET')
