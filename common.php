@@ -248,7 +248,7 @@ function response_data($res, $fetch=true)
 function cdn_image($uri)
 {
     $ext = cdn_get_ext($uri);
-    if($ext=='jpg' || $ext=='png' || $ext=='jpeg' ||$ext=='svg')
+    if($ext=='jpg' || $ext=='png' || $ext=='jpeg' || $ext=='svg' || $ext=='gif')
     {
         return cfg::get('file','cdn').'/rester-cdn/image/'.$uri;
     }
