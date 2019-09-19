@@ -35,7 +35,7 @@ class session
     {
         if(self::$cache) return;
 
-        $redis_cfg = cfg::cache();
+        $redis_cfg = cfg::session();
         if(!($redis_cfg['host'] && $redis_cfg['port']))
             throw new Exception("Require cache config to use auth.", rester_response::code_config);
 

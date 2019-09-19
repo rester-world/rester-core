@@ -35,6 +35,8 @@ class cfg
     const request_prefix = 'prefix';
 
     const session = 'session';
+    const session_host    = 'host';
+    const session_port    = 'port';
     const session_timeout = 'timeout';
 
     const access_control = 'access_control';
@@ -132,6 +134,26 @@ class cfg
      * @return int
      */
     public static function cache_timeout() { return self::$data[self::cache][self::cache_timeout]; }
+
+    /**
+     * @return array
+     */
+    public static function session() { return self::$data[self::session]; }
+
+    /**
+     * @return string
+     */
+    public static function session_host() { return self::$data[self::session][self::session_host]; }
+
+    /**
+     * @return string
+     */
+    public static function session_port() { return self::$data[self::session][self::session_port]; }
+
+    /**
+     * @return int
+     */
+    public static function session_timeout() { return self::$data[self::session][self::session_timeout]; }
 
     /**
      * @param string $select
