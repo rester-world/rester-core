@@ -378,7 +378,9 @@ if (get_magic_quotes_gpc())
 
 //=============================================================================
 /// add slashes
+/// 2019.09.24 보안상의 이유로 넣었지만 API들 간의 호출시 자동으로 slashes가 추가되면서
+/// 데이터베이스에 slashes가 많이 추가되는 현상이 발생하여 제거함
 //=============================================================================
-if(is_array($_POST)) array_walk_recursive($_POST, function(&$item){ $item = addslashes($item); });
-if(is_array($_GET)) array_walk_recursive($_GET, function(&$item){ $item = addslashes($item); });
-if(is_array($_COOKIE)) array_walk_recursive($_COOKIE, function(&$item){ $item = addslashes($item); });
+//if(is_array($_POST)) array_walk_recursive($_POST, function(&$item){ $item = addslashes($item); });
+//if(is_array($_GET)) array_walk_recursive($_GET, function(&$item){ $item = addslashes($item); });
+//if(is_array($_COOKIE)) array_walk_recursive($_COOKIE, function(&$item){ $item = addslashes($item); });
